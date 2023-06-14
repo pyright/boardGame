@@ -58,12 +58,26 @@ class Player{
     hand[]
     handSize = this.hand.length
 
+    draftHand[]
+    draftHandSize = this.draftHand.length
+
     drawBool;
 
     playerNumber
 }
 
 
+
+var playerList = [];
+
+function createNewPlayer(){
+    var newPlayer = new Player();
+    return newPlayer;
+}
+
+function addPlayer(){
+    playerList.push(createNewPlayer());
+}
 
 //MATH
 function getRandomInt(min, max) {
@@ -79,15 +93,17 @@ function getRandomInt(min, max) {
 //36 cards total. 12 characters total. 3 cards of each character.
 //Deal 9 cards to 4 players. Draft 3 cards. Shuffle undrafted cards and make a draw pile.
 
-
-const deck = [];
+const fullDeck = [];
+let deck = [];
 let drawPile = [];
+
+let draftCounter = 0;
 
 let myDrawIndex;
 let myDrawCard;
 
 //returns a random index in a specified array
-function randomDraw(arr){
+function randomCard(arr){
     return getRandomInt(0, (arr.length));
 }
 
@@ -103,16 +119,41 @@ function updatePile(arr, i){
 //Phase 0, DRAFT
 //Deal 9 cards from deck[] to 4 players. Draft 3 cards. Shuffle undrafted cards and make a draw pile.
 
+const freshDraftHandLimit = 9;
+
+function draft(playerListArr){
+
+    let myDraftIndex;
+    let myDraftCard;
+
+
+    while(draftCounter < freshDraftHandLimit){
+        for(var playerNum = 0; playerNum < playerListArr.length; playerNum++){
+            myDraftIndex = randomCard(deck); //select a card from deck[]
+            myDraftCard = deck[myDraftIndex];  //store the card in myDraftCard
+
+            playerListArr[playerNum].draftHand.push(myDraftCard); //add myDraftCArd card to player.draftHand[]
+
+            deck.splice[myDraftIndex, 1]; //remove the myDraftCard from deck[] 
+             
+            //Reset myDraftCard and myDraftIndex
+            myDraftIndex = null;
+            myDraftCard = null;
+        }
+        draftCounter++;
+    }
+}
+
+draft(playerList);
 
 /*********************************************************************************************/
 //Phase 1, DRAW
 
 function drawCard(player){
-        myDrawIndex = randomDraw(drawPile); //select a card from drawPile
+        myDrawIndex = randomCard(drawPile); //select a card from drawPile
         myDrawCard = drawPile[myDrawIndex]  //store the card in myDrawCard
 
-        player.hand.push(myDraw); //add myDrawCArd card to player.hand[]
-        player.handSize += 1; //update hand size
+        player.hand.push(myDrawCard); //add myDrawCArd card to player.hand[]
 
         drawPile.splice[myDrawIndex, 1]; //remove the myDrawCard from drawPile[]   
 
